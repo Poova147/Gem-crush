@@ -22,377 +22,208 @@
           On localhost you'll see placeholder boxes (that's normal).
   ============================================================
 -->
-
-<!-- AdSense script — replace Publisher ID -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0f0c1a;
-    --surface: #1c1730;
-    --surface2: #251e3e;
-    --accent: #a78bfa;
-    --accent2: #f472b6;
-    --text: #f0eaff;
-    --muted: #8b7db5;
+    --bg: #0f0c1a; --surface: #1c1730; --surface2: #251e3e;
+    --accent: #a78bfa; --accent2: #f472b6; --text: #f0eaff; --muted: #8b7db5;
     --radius: 12px;
-    --gem1: #ff6b6b; --gem2: #ffd93d; --gem3: #6bcb77; --gem4: #4d96ff; --gem5: #c77dff; --gem6: #ff9f43;
   }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* ── TOP BANNER AD ── */
-  .ad-banner-top {
-    width: 100%;
-    max-width: 728px;
-    min-height: 90px;
-    background: var(--surface);
-    border-bottom: 1px solid rgba(167,139,250,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-  }
+  /* TOP BANNER AD */
+  .ad-banner-top { width: 100%; max-width: 728px; min-height: 90px; background: var(--surface); border-bottom: 1px solid rgba(167,139,250,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; }
   .ad-banner-top ins { display: block; width: 728px; height: 90px; }
-  /* Fallback label shown only when AdSense hasn't loaded yet */
-  .ad-label {
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-align: center;
-    margin-top: 4px;
-  }
+  .ad-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; text-align: center; margin-top: 4px; }
 
-  .page-layout {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding: 20px 16px;
-    width: 100%;
-    max-width: 1100px;
-  }
+  .page-layout { display: flex; gap: 20px; align-items: flex-start; padding: 20px 16px; width: 100%; max-width: 1100px; }
 
-  /* ── LEFT SIDEBAR AD ── */
-  .ad-sidebar {
-    width: 160px;
-    min-height: 600px;
-    background: var(--surface);
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    flex-shrink: 0;
-  }
-  .ad-sidebar ins { display: block; width: 160px; height: 600px; }
+  /* SIDEBAR ADS */
+  .ad-sidebar, .ad-sidebar-right { width: 160px; min-height: 600px; background: var(--surface); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; flex-shrink: 0; }
+  .ad-sidebar ins, .ad-sidebar-right ins { display: block; width: 160px; height: 600px; }
 
-  /* ── GAME AREA ── */
-  .game-area {
-    flex: 1;
-    max-width: 520px;
-  }
+  /* GAME AREA */
+  .game-area { flex: 1; max-width: 520px; }
 
-  header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  header h1 {
-    font-size: 32px;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
-  }
-  header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  header { text-align: center; margin-bottom: 16px; }
+  header h1 { font-size: 30px; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  header p { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  .hud {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .hud-card {
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 8px 10px;
-    text-align: center;
-  }
-  .hud-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-  .hud-val { font-size: 20px; font-weight: 900; color: var(--text); }
+  /* TABS */
+  .tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 10px; padding: 4px; margin-bottom: 14px; }
+  .tab { flex: 1; padding: 7px; border: none; background: none; cursor: pointer; border-radius: 7px; font-size: 13px; color: var(--muted); font-family: 'Nunito', sans-serif; transition: background .2s, color .2s; }
+  .tab.active { background: var(--surface2); color: var(--text); font-weight: 700; }
+  .panel { display: none; } .panel.show { display: block; }
 
-  .level-info {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 13px;
-  }
+  /* HUD */
+  .hud { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 10px; }
+  .hc { background: var(--surface); border-radius: 10px; padding: 8px 10px; text-align: center; }
+  .hl { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .hv { font-size: 20px; font-weight: 900; color: var(--text); }
+  .mbar { height: 4px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .mfill { height: 100%; background: #6bcb77; border-radius: 4px; transition: width .3s; }
+
+  .level-info { background: var(--surface); border-radius: var(--radius); padding: 9px 14px; margin-bottom: 9px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
   .level-info strong { color: var(--accent); }
 
-  .progress-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
-  .progress-track { flex: 1; height: 7px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.4s ease; }
+  .progress-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-size: 12px; color: var(--muted); }
+  .progress-track { flex: 1; height: 7px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width .4s ease; }
 
-  #board {
-    display: grid;
-    gap: 4px;
-    margin-bottom: 10px;
-    position: relative;
-  }
-  .gem {
-    aspect-ratio: 1;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: transform 0.1s, box-shadow 0.15s;
-    user-select: none;
-    position: relative;
-  }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 9px; font-size: 11px; color: var(--muted); background: var(--surface); border-radius: 8px; padding: 7px 12px; }
+
+  #board { display: grid; gap: 4px; margin-bottom: 9px; position: relative; }
+  .gem { aspect-ratio: 1; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; border: 2px solid transparent; transition: transform .1s, box-shadow .15s; user-select: none; position: relative; }
   .gem:hover { transform: scale(1.1); }
-  .gem.selected { border-color: #fff; transform: scale(1.13); box-shadow: 0 0 12px rgba(255,255,255,0.4); }
-  .gem.frozen::after { content:'🧊'; position:absolute; font-size:9px; top:1px; right:1px; }
-  .gem.bomb-gem::after { content:'💣'; position:absolute; font-size:9px; top:1px; right:1px; }
+  .gem.selected { border-color: #fff; transform: scale(1.14); box-shadow: 0 0 10px rgba(255,255,255,0.35); }
+  .badge { position: absolute; top: 1px; right: 2px; font-size: 8px; line-height: 1; }
 
-  #msg {
-    font-size: 13px;
-    color: var(--muted);
-    text-align: center;
-    min-height: 18px;
-    margin-bottom: 8px;
-  }
+  #msg { font-size: 12px; color: var(--muted); text-align: center; min-height: 18px; margin-bottom: 8px; }
 
-  /* ── REWARDED AD BUTTON ── */
-  .rewarded-ad-bar {
-    background: var(--surface);
-    border: 1px solid rgba(167,139,250,0.25);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
+  /* REWARDED AD */
+  .rewarded-ad-bar { background: var(--surface); border: 1px solid rgba(167,139,250,0.2); border-radius: var(--radius); padding: 9px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
   .rewarded-ad-bar span { font-size: 12px; color: var(--muted); }
-  .rewarded-btn {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-  .rewarded-btn:hover { opacity: 0.85; }
+  .rewarded-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 8px; padding: 6px 14px; font-size: 12px; font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+  .rewarded-btn:hover { opacity: .85; }
+  .rewarded-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* ── BOTTOM RECTANGLE AD ── */
-  .ad-bottom {
-    background: var(--surface);
-    border-radius: var(--radius);
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-  }
+  /* BOTTOM AD */
+  .ad-bottom { background: var(--surface); border-radius: var(--radius); min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; }
   .ad-bottom ins { display: block; width: 320px; height: 100px; }
 
-  /* ── OVERLAY ── */
-  #overlay {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: rgba(15,12,26,0.88);
-    border-radius: var(--radius);
-    z-index: 20;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
+  /* OVERLAY */
+  #overlay { display: none; position: absolute; inset: 0; background: rgba(15,12,26,.88); border-radius: var(--radius); z-index: 20; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
   #overlay.show { display: flex; }
   #overlay h2 { font-size: 26px; font-weight: 900; color: var(--text); }
   #overlay p { font-size: 14px; color: var(--muted); }
-  #overlay button {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 28px;
-    font-size: 15px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    cursor: pointer;
-    margin-top: 6px;
-  }
+  #overlay button { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 10px; padding: 10px 28px; font-size: 15px; font-family: 'Nunito', sans-serif; font-weight: 800; cursor: pointer; margin-top: 6px; }
 
-  /* ── RIGHT SIDEBAR AD ── */
-  .ad-sidebar-right {
-    width: 160px;
-    min-height: 600px;
-    background: var(--surface);
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    flex-shrink: 0;
-  }
-  .ad-sidebar-right ins { display: block; width: 160px; height: 600px; }
+  /* LEADERBOARD */
+  .lb-wrap { background: var(--surface); border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; }
+  .lb-row { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--surface2); font-size: 13px; }
+  .lb-rank { width: 28px; text-align: center; font-weight: 700; color: var(--muted); }
+  .lb-name { flex: 1; color: var(--text); }
+  .lb-score { font-weight: 700; color: var(--accent); }
+  .name-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .name-row input { flex: 1; padding: 8px 12px; font-size: 13px; border-radius: 8px; background: var(--surface); color: var(--text); border: 1px solid var(--surface2); font-family: 'Nunito', sans-serif; }
+  .name-row button, .clear-btn { background: var(--surface2); color: var(--text); border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: 'Nunito', sans-serif; cursor: pointer; }
+  .clear-btn { width: 100%; margin-top: 4px; }
 
-  /* ── MOVES BAR ── */
-  .moves-bar { height: 4px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-top: 4px; }
-  .moves-fill { height: 100%; background: #6bcb77; border-radius: 4px; transition: width 0.3s; }
+  /* SETTINGS */
+  .sfx-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 10px; margin-bottom: 8px; font-size: 13px; color: var(--text); }
+  .sfx-row button { background: var(--surface2); color: var(--text); border: none; border-radius: 7px; padding: 5px 14px; font-size: 13px; font-family: 'Nunito', sans-serif; cursor: pointer; min-width: 48px; }
+  .settings-info { padding: 10px 14px; font-size: 12px; color: var(--muted); background: var(--surface); border-radius: 10px; line-height: 1.8; }
 
-  @media (max-width: 900px) {
-    .ad-sidebar, .ad-sidebar-right { display: none; }
-  }
-  @media (max-width: 600px) {
-    .ad-banner-top ins { width: 320px; height: 50px; }
-    header h1 { font-size: 24px; }
-  }
+  @media (max-width: 900px) { .ad-sidebar, .ad-sidebar-right { display: none; } }
+  @media (max-width: 600px) { .ad-banner-top ins { width: 320px; height: 50px; } header h1 { font-size: 24px; } }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════
-     AD UNIT 1: Leaderboard (728×90) — Top Banner
-     Replace data-ad-slot with your Ad Unit ID
-     ═══════════════════════════════════════════════ -->
+<!-- AD UNIT 1: Leaderboard 728×90 — replace data-ad-slot -->
 <div class="ad-banner-top">
-  <div>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    <p class="ad-label">Advertisement</p>
-  </div>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  <p class="ad-label">Advertisement</p>
 </div>
 
 <div class="page-layout">
 
-  <!-- ═══════════════════════════════════════════════
-       AD UNIT 2: Wide Skyscraper (160×600) — Left
-       Replace data-ad-slot with your Ad Unit ID
-       ═══════════════════════════════════════════════ -->
+  <!-- AD UNIT 2: Left skyscraper 160×600 — replace data-ad-slot -->
   <div class="ad-sidebar">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXXXXXXXXXX"
-         data-ad-format="auto"></ins>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXXXXXXXXXX" data-ad-format="auto"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     <p class="ad-label">Ad</p>
   </div>
 
-  <!-- ═══ GAME ═══ -->
   <main class="game-area">
     <header>
       <h1>💎 Gem Crush</h1>
-      <p>Match gems • Earn points • Beat levels</p>
+      <p>Match gems · Beat levels · Earn your place on the board</p>
     </header>
 
-    <div class="hud">
-      <div class="hud-card"><div class="hud-label">Score</div><div class="hud-val" id="score">0</div></div>
-      <div class="hud-card">
-        <div class="hud-label">Moves</div>
-        <div class="hud-val" id="moves">20</div>
-        <div class="moves-bar"><div class="moves-fill" id="moves-fill" style="width:100%"></div></div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('game')">Game</button>
+      <button class="tab" onclick="showTab('board')">Leaderboard</button>
+      <button class="tab" onclick="showTab('settings')">Settings</button>
+    </div>
+
+    <!-- GAME PANEL -->
+    <div id="panel-game" class="panel show">
+      <div class="hud">
+        <div class="hc"><div class="hl">Score</div><div class="hv" id="score">0</div></div>
+        <div class="hc"><div class="hl">Moves</div><div class="hv" id="moves">20</div><div class="mbar"><div class="mfill" id="moves-fill" style="width:100%"></div></div></div>
+        <div class="hc"><div class="hl">Level</div><div class="hv" id="level-num">1</div></div>
+        <div class="hc"><div class="hl">Best</div><div class="hv" id="best">0</div></div>
       </div>
-      <div class="hud-card"><div class="hud-label">Level</div><div class="hud-val" id="level-num">1</div></div>
-      <div class="hud-card"><div class="hud-label">Best</div><div class="hud-val" id="best">0</div></div>
-    </div>
+      <div class="level-info">
+        <strong id="level-name">Level 1 — Warm-up</strong>
+        <span id="level-desc" style="color:var(--muted);font-size:12px">Match to reach the target!</span>
+      </div>
+      <div class="progress-wrap">
+        <span id="target-label" style="min-width:85px">0 / 300</span>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <span id="target-pct">0%</span>
+      </div>
+      <div class="legend">
+        <span>🧊 frozen</span><span>💣 bomb (3×3)</span><span>⚡ lightning (row)</span><span>🌈 rainbow (colour)</span><span>2x multiplier</span>
+      </div>
+      <div style="position:relative">
+        <div id="board"></div>
+        <div id="overlay">
+          <h2 id="ov-title">Level Complete!</h2>
+          <p id="ov-sub">Score: 0</p>
+          <button onclick="overlayAction()">Next Level ▶</button>
+        </div>
+      </div>
+      <p id="msg">Swap adjacent gems to match 3 or more!</p>
 
-    <div class="level-info">
-      <strong id="level-name">Level 1 — Warm-up</strong>
-      <span id="level-desc" style="color:var(--muted);font-size:12px">Match to reach the target!</span>
-    </div>
+      <!-- REWARDED AD — replace fakeRewardedAd() with your SDK call -->
+      <div class="rewarded-ad-bar">
+        <span>🎬 Watch a short video for bonus moves</span>
+        <button class="rewarded-btn" id="ad-btn" onclick="showRewardedAd()">Watch Ad → +5 moves</button>
+      </div>
 
-    <div class="progress-wrap">
-      <span id="target-label" style="min-width:90px">0 / 300</span>
-      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <span id="target-pct">0%</span>
-    </div>
-
-    <div style="position:relative">
-      <div id="board"></div>
-      <div id="overlay">
-        <h2 id="ov-title">Level Complete!</h2>
-        <p id="ov-sub">Score: 0</p>
-        <button onclick="overlayAction()">Next Level ▶</button>
+      <!-- AD UNIT 3: Rectangle 320×100 — replace data-ad-slot -->
+      <div class="ad-bottom">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <p class="ad-label">Advertisement</p>
       </div>
     </div>
 
-    <p id="msg">Swap adjacent gems to match 3 or more!</p>
-
-    <!-- ═══════════════════════════════════════════════
-         REWARDED ADS — best earner for casual games
-         Replace the fakeAd() call with your rewarded
-         video SDK (AdMob, IronSource, etc.)
-         ═══════════════════════════════════════════════ -->
-    <div class="rewarded-ad-bar">
-      <span>🎬 Watch a short video for bonus moves</span>
-      <button class="rewarded-btn" onclick="showRewardedAd()">Watch Ad → +5 moves</button>
+    <!-- LEADERBOARD PANEL -->
+    <div id="panel-board" class="panel">
+      <div class="name-row">
+        <input id="pname" placeholder="Enter your name" maxlength="16" value="Player"/>
+        <button onclick="saveName()">Save</button>
+      </div>
+      <div class="lb-wrap" id="lb-list">
+        <div style="padding:20px;text-align:center;font-size:13px;color:var(--muted)">No scores yet — play a level!</div>
+      </div>
+      <button class="clear-btn" onclick="clearLB()">Clear leaderboard</button>
     </div>
 
-    <!-- ═══════════════════════════════════════════════
-         AD UNIT 3: Rectangle (320×100) — Below game
-         Replace data-ad-slot with your Ad Unit ID
-         ═══════════════════════════════════════════════ -->
-    <div class="ad-bottom">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-           data-ad-slot="XXXXXXXXXXXXXXXXXX"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      <p class="ad-label">Advertisement</p>
+    <!-- SETTINGS PANEL -->
+    <div id="panel-settings" class="panel">
+      <div class="sfx-row"><span>Sound effects</span><button id="sfx-btn" onclick="toggleSfx()">On</button></div>
+      <div class="sfx-row"><span>Music (chiptune loop)</span><button id="mus-btn" onclick="toggleMusic()">Off</button></div>
+      <div class="settings-info" style="margin-top:8px">
+        ⚡ <strong>Lightning</strong> — clears the entire row<br>
+        🌈 <strong>Rainbow</strong> — matches any colour, wipes all of that colour<br>
+        💣 <strong>Bomb</strong> — explodes a 3×3 area around it<br>
+        <strong>2x</strong> — doubles all points for that chain<br><br>
+        Special gems appear from level 3 onwards.
+      </div>
     </div>
   </main>
 
-  <!-- ═══════════════════════════════════════════════
-       AD UNIT 4: Wide Skyscraper (160×600) — Right
-       Replace data-ad-slot with your Ad Unit ID
-       ═══════════════════════════════════════════════ -->
+  <!-- AD UNIT 4: Right skyscraper 160×600 — replace data-ad-slot -->
   <div class="ad-sidebar-right">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXXXXXXXXXX"
-         data-ad-format="auto"></ins>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXXXXXXXXXX" data-ad-format="auto"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     <p class="ad-label">Ad</p>
   </div>
@@ -400,49 +231,145 @@
 </div>
 
 <script>
+// ── LEVELS ──────────────────────────────────────────────────
 const LEVELS = [
-  { name:'Level 1 — Warm-up',    desc:'Get started!',              target:300,  moves:20, cols:6, gemCount:4, frozen:0,  bombs:0 },
-  { name:'Level 2 — Heating up', desc:'More gems!',                target:600,  moves:22, cols:7, gemCount:5, frozen:0,  bombs:0 },
-  { name:'Level 3 — Icy gems',   desc:'Break the frozen gems!',    target:1000, moves:22, cols:7, gemCount:5, frozen:4,  bombs:0 },
-  { name:'Level 4 — Bomb squad', desc:'Use bombs wisely!',         target:1500, moves:20, cols:8, gemCount:5, frozen:3,  bombs:3 },
-  { name:'Level 5 — Chaos',      desc:'Limited moves!',            target:2200, moves:18, cols:8, gemCount:6, frozen:5,  bombs:3 },
-  { name:'Level 6 — Inferno',    desc:'No room for error!',        target:3000, moves:16, cols:8, gemCount:6, frozen:6,  bombs:4 },
-  { name:'Level 7 — Master',     desc:'Can you handle this?',      target:4000, moves:15, cols:8, gemCount:6, frozen:8,  bombs:5 },
-  { name:'Level 8 — Legend',     desc:'The ultimate challenge!',   target:6000, moves:14, cols:8, gemCount:6, frozen:10, bombs:6 },
+  {name:'Level 1 — Warm-up',   desc:'Get started!',            target:300,  moves:20, cols:6, gc:4, fr:0,  bm:0, lt:0, rb:0, mx:0},
+  {name:'Level 2 — Heating up',desc:'More gems!',              target:600,  moves:22, cols:7, gc:5, fr:0,  bm:0, lt:0, rb:0, mx:0},
+  {name:'Level 3 — Icy gems',  desc:'Break the frozen gems!',  target:1000, moves:22, cols:7, gc:5, fr:4,  bm:0, lt:1, rb:0, mx:1},
+  {name:'Level 4 — Bomb squad',desc:'Use bombs wisely!',       target:1500, moves:20, cols:8, gc:5, fr:3,  bm:3, lt:1, rb:1, mx:1},
+  {name:'Level 5 — Chaos',     desc:'Limited moves!',          target:2200, moves:18, cols:8, gc:6, fr:5,  bm:3, lt:2, rb:1, mx:2},
+  {name:'Level 6 — Inferno',   desc:'No room for error!',      target:3000, moves:16, cols:8, gc:6, fr:6,  bm:4, lt:2, rb:2, mx:2},
+  {name:'Level 7 — Master',    desc:'Can you handle this?',    target:4000, moves:15, cols:8, gc:6, fr:8,  bm:5, lt:3, rb:2, mx:3},
+  {name:'Level 8 — Legend',    desc:'Ultimate challenge!',     target:6000, moves:14, cols:8, gc:6, fr:10, bm:6, lt:3, rb:3, mx:3},
 ];
+
 const ALL_GEMS = ['🔴','🟡','🟢','🔵','🟣','🟠'];
-const GEM_BG = ['#3d1a1a','#3d3010','#1a3d20','#1a2a3d','#2d1a3d','#3d2510'];
+const GEM_BG   = ['#3d1a1a','#3d3010','#1a3d20','#1a2a3d','#2d1a3d','#3d2510'];
 
-let lvlIdx=0, board=[], frozen=[], bombIdx=[], score=0, moves=0, selected=null, busy=false, best=0;
-let COLS=6, ROWS=8, GEMS=[], TARGET=300, MAX_MOVES=20;
+let lvlIdx=0, board=[], frozen=[], bombs=[], specials={};
+let score=0, moves=0, sel=null, busy=false, best=0;
+let COLS=6, ROWS=8, GEMS=[], TGT=300, MAXM=20;
+let sfxOn=true, musOn=false, playerName='Player';
+let leaderboard=JSON.parse(localStorage.getItem('gc_lb')||'[]');
+let audioCtx=null, musicTimer=null, musicGain=null;
 
-function loadLevel(idx) {
-  const l = LEVELS[Math.min(idx, LEVELS.length-1)];
-  COLS=l.cols; GEMS=ALL_GEMS.slice(0,l.gemCount);
-  TARGET=l.target; MAX_MOVES=l.moves; moves=l.moves;
-  frozen=[]; bombIdx=[];
+// ── AUDIO ────────────────────────────────────────────────────
+function getCtx(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function playTone(freq,dur,type='sine',vol=0.3){
+  if(!sfxOn) return;
+  try{
+    const ctx=getCtx(), o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type=type; o.frequency.setValueAtTime(freq,ctx.currentTime);
+    g.gain.setValueAtTime(vol,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    o.start(); o.stop(ctx.currentTime+dur);
+  }catch(e){}
+}
+function sfxMatch()   { playTone(440,.08,'square',.2); setTimeout(()=>playTone(660,.1,'square',.2),80); }
+function sfxBomb()    { playTone(120,.3,'sawtooth',.4); setTimeout(()=>playTone(80,.2,'sawtooth',.3),150); }
+function sfxLightning(){ playTone(880,.05,'square',.3); setTimeout(()=>playTone(1200,.1,'square',.2),50); setTimeout(()=>playTone(660,.15,'sine',.15),100); }
+function sfxWin()     { [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,.15,'sine',.25),i*120)); }
+function sfxFail()    { [400,350,300,250].forEach((f,i)=>setTimeout(()=>playTone(f,.12,'square',.2),i*100)); }
+function sfxSwap()    { playTone(330,.06,'sine',.15); }
+function sfxBad()     { playTone(200,.1,'square',.15); }
+function sfxReward()  { playTone(523,.1,'sine',.2); setTimeout(()=>playTone(659,.1,'sine',.2),100); }
+
+function startMusic(){
+  if(!musOn) return;
+  try{
+    const ctx=getCtx();
+    if(musicGain){ musicGain.gain.value=0; }
+    musicGain=ctx.createGain(); musicGain.gain.value=0.06; musicGain.connect(ctx.destination);
+    const notes=[261,294,329,349,392,440,494,523];
+    const pat=[0,2,4,5,4,2,0,7,5,4,2,0,2,4,0];
+    let t=ctx.currentTime;
+    function loop(){
+      if(!musOn) return;
+      pat.forEach((n,i)=>{
+        const o=ctx.createOscillator(); o.connect(musicGain);
+        o.type='square'; o.frequency.value=notes[n%notes.length];
+        o.start(t+i*0.18); o.stop(t+i*0.18+0.15);
+      });
+      t+=pat.length*0.18;
+      musicTimer=setTimeout(loop,(pat.length*0.18-0.5)*1000);
+    }
+    loop();
+  }catch(e){}
+}
+function stopMusic(){ if(musicGain) musicGain.gain.value=0; clearTimeout(musicTimer); }
+function toggleSfx(){ sfxOn=!sfxOn; document.getElementById('sfx-btn').textContent=sfxOn?'On':'Off'; }
+function toggleMusic(){ musOn=!musOn; document.getElementById('mus-btn').textContent=musOn?'On':'Off'; musOn?startMusic():stopMusic(); }
+
+// ── TABS ─────────────────────────────────────────────────────
+function showTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['game','board','settings'][i]===t));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById('panel-'+t).classList.add('show');
+  if(t==='board') renderLB();
+}
+
+// ── LEADERBOARD ──────────────────────────────────────────────
+function saveName(){ playerName=document.getElementById('pname').value.trim()||'Player'; }
+function clearLB(){ leaderboard=[]; localStorage.setItem('gc_lb','[]'); renderLB(); }
+function addScore(s,lvl){
+  leaderboard.push({name:playerName,score:s,level:lvl,date:new Date().toLocaleDateString()});
+  leaderboard.sort((a,b)=>b.score-a.score);
+  if(leaderboard.length>10) leaderboard=leaderboard.slice(0,10);
+  localStorage.setItem('gc_lb',JSON.stringify(leaderboard));
+}
+function renderLB(){
+  const el=document.getElementById('lb-list');
+  if(!leaderboard.length){ el.innerHTML='<div style="padding:20px;text-align:center;font-size:13px;color:var(--muted)">No scores yet — play a level!</div>'; return; }
+  const medals=['🥇','🥈','🥉'];
+  el.innerHTML=leaderboard.map((e,i)=>`
+    <div class="lb-row">
+      <div class="lb-rank">${medals[i]||i+1}</div>
+      <div class="lb-name">${e.name}</div>
+      <div style="font-size:11px;color:var(--muted);margin-right:8px">Lvl ${e.level} · ${e.date}</div>
+      <div class="lb-score">${e.score.toLocaleString()}</div>
+    </div>`).join('');
+}
+
+// ── GAME LOGIC ───────────────────────────────────────────────
+function rand(n){ return Math.floor(Math.random()*n); }
+function shuf(a){ for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]];} return a; }
+function gemAt(r,c){ return board[r*COLS+c]; }
+function setGem(r,c,v){ board[r*COLS+c]=v; }
+
+function loadLevel(i){
+  const l=LEVELS[Math.min(i,LEVELS.length-1)];
+  COLS=l.cols; GEMS=ALL_GEMS.slice(0,l.gc); TGT=l.target; MAXM=l.moves; moves=l.moves;
+  frozen=[]; bombs=[]; specials={};
   board=Array.from({length:ROWS*COLS},()=>GEMS[rand(GEMS.length)]);
   while(findMatches().length) board=Array.from({length:ROWS*COLS},()=>GEMS[rand(GEMS.length)]);
-  const cells=shuffled([...Array(ROWS*COLS).keys()]);
-  cells.slice(0,l.frozen).forEach(i=>frozen.push(i));
-  cells.slice(l.frozen,l.frozen+l.bombs).forEach(i=>bombIdx.push(i));
+  const cells=shuf([...Array(ROWS*COLS).keys()]);
+  cells.slice(0,l.fr).forEach(x=>frozen.push(x));
+  cells.slice(l.fr,l.fr+l.bm).forEach(x=>bombs.push(x));
+  cells.slice(l.fr+l.bm,l.fr+l.bm+l.lt).forEach(x=>specials[x]='lt');
+  cells.slice(l.fr+l.bm+l.lt,l.fr+l.bm+l.lt+l.rb).forEach(x=>specials[x]='rb');
+  cells.slice(l.fr+l.bm+l.lt+l.rb,l.fr+l.bm+l.lt+l.rb+l.mx).forEach(x=>specials[x]='mx');
   document.getElementById('level-name').textContent=l.name;
   document.getElementById('level-desc').textContent=l.desc;
-  document.getElementById('level-num').textContent=idx+1;
+  document.getElementById('level-num').textContent=i+1;
   document.getElementById('overlay').classList.remove('show');
   updateHUD(); render();
 }
 
-function rand(n){return Math.floor(Math.random()*n);}
-function shuffled(a){for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
-function gemAt(r,c){return board[r*COLS+c];}
-function setGem(r,c,v){board[r*COLS+c]=v;}
-
 function findMatches(){
   let m=new Set();
-  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-2;c++){let g=gemAt(r,c);if(g&&g===gemAt(r,c+1)&&g===gemAt(r,c+2))[0,1,2].forEach(i=>m.add(r*COLS+c+i));}
-  for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-2;r++){let g=gemAt(r,c);if(g&&g===gemAt(r+1,c)&&g===gemAt(r+2,c))[0,1,2].forEach(i=>m.add((r+i)*COLS+c));}
-  return[...m];
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-2;c++){ let g=gemAt(r,c); if(g&&g===gemAt(r,c+1)&&g===gemAt(r,c+2)) [0,1,2].forEach(i=>m.add(r*COLS+c+i)); }
+  for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-2;r++){ let g=gemAt(r,c); if(g&&g===gemAt(r+1,c)&&g===gemAt(r+2,c)) [0,1,2].forEach(i=>m.add((r+i)*COLS+c)); }
+  return [...m];
+}
+
+function specialBadge(i){
+  if(specials[i]==='lt') return '⚡';
+  if(specials[i]==='rb') return '🌈';
+  if(specials[i]==='mx') return '2x';
+  if(bombs.includes(i))  return '💣';
+  if(frozen.includes(i)) return '🧊';
+  return '';
 }
 
 function render(){
@@ -451,11 +378,11 @@ function render(){
   bd.innerHTML='';
   board.forEach((g,i)=>{
     const el=document.createElement('div');
-    el.className='gem'; el.textContent=g;
+    el.className='gem';
     el.style.background=GEM_BG[ALL_GEMS.indexOf(g)]||'#1c1730';
-    if(frozen.includes(i))el.classList.add('frozen');
-    if(bombIdx.includes(i))el.classList.add('bomb-gem');
-    if(selected===i)el.classList.add('selected');
+    const badge=specialBadge(i);
+    el.innerHTML=`<span style="font-size:16px">${g}</span>${badge?`<span class="badge">${badge}</span>`:''}`;
+    if(sel===i) el.classList.add('selected');
     el.onclick=()=>onTap(i);
     bd.appendChild(el);
   });
@@ -465,97 +392,96 @@ function render(){
 function updateHUD(){
   document.getElementById('score').textContent=score.toLocaleString();
   document.getElementById('moves').textContent=moves;
-  document.getElementById('moves-fill').style.width=Math.round((moves/MAX_MOVES)*100)+'%';
-  const pct=Math.min(100,Math.round((score/TARGET)*100));
+  document.getElementById('moves-fill').style.width=Math.round((moves/MAXM)*100)+'%';
+  const pct=Math.min(100,Math.round((score/TGT)*100));
   document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('target-label').textContent=`${score.toLocaleString()} / ${TARGET.toLocaleString()}`;
+  document.getElementById('target-label').textContent=`${score.toLocaleString()} / ${TGT.toLocaleString()}`;
   document.getElementById('target-pct').textContent=pct+'%';
-  if(score>best){best=score;document.getElementById('best').textContent=best.toLocaleString();}
+  if(score>best){ best=score; document.getElementById('best').textContent=best.toLocaleString(); }
 }
 
 function onTap(i){
-  if(busy)return;
-  if(selected===null){selected=i;render();return;}
-  if(selected===i){selected=null;render();return;}
-  const r1=Math.floor(selected/COLS),c1=selected%COLS,r2=Math.floor(i/COLS),c2=i%COLS;
-  if((Math.abs(r1-r2)+Math.abs(c1-c2))!==1){selected=i;render();return;}
-  doSwap(selected,i);
+  if(busy) return;
+  if(sel===null){ sel=i; sfxSwap(); render(); return; }
+  if(sel===i){ sel=null; render(); return; }
+  const r1=Math.floor(sel/COLS),c1=sel%COLS,r2=Math.floor(i/COLS),c2=i%COLS;
+  if((Math.abs(r1-r2)+Math.abs(c1-c2))!==1){ sel=i; render(); return; }
+  doSwap(sel,i);
 }
 
 async function doSwap(a,b){
-  busy=true;selected=null;
-  if(frozen.includes(a)||frozen.includes(b)){setMsg('That gem is frozen! Match it to break it.');busy=false;render();return;}
+  busy=true; sel=null;
+  if(frozen.includes(a)||frozen.includes(b)){ setMsg('Frozen! Match it to break free.'); sfxBad(); busy=false; render(); return; }
   [board[a],board[b]]=[board[b],board[a]];
-  if(!findMatches().length){[board[a],board[b]]=[board[b],board[a]];busy=false;setMsg('No match — try again!');render();return;}
+  [specials[a],specials[b]]=[specials[b],specials[a]];
+  if(!findMatches().length){ [board[a],board[b]]=[board[b],board[a]]; [specials[a],specials[b]]=[specials[b],specials[a]]; busy=false; setMsg('No match — try again!'); sfxBad(); render(); return; }
   moves--;
   await resolveMatches();
-  if(score>=TARGET)showOverlay(true);
-  else if(moves<=0)showOverlay(false);
-  busy=false;render();
+  if(score>=TGT) showOverlay(true);
+  else if(moves<=0) showOverlay(false);
+  busy=false; render();
 }
 
 async function resolveMatches(){
   let m=findMatches();
   while(m.length){
-    let bonus=0;
-    m.forEach(i=>{
+    sfxMatch();
+    let extra=[], mult=1, bonus=0;
+    const mset=[...new Set(m)];
+    mset.forEach(i=>{
       frozen=frozen.filter(f=>f!==i);
-      if(bombIdx.includes(i)){
-        const r=Math.floor(i/COLS),c=i%COLS;
-        for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const ni=(r+dr)*COLS+(c+dc);if(ni>=0&&ni<board.length){m.push(ni);bonus+=20;}}
-        bombIdx=bombIdx.filter(b=>b!==i);
-      }
-      board[i]=null;
+      const sp=specials[i];
+      if(sp==='lt'){ sfxLightning(); const row=Math.floor(i/COLS); for(let c=0;c<COLS;c++) extra.push(row*COLS+c); delete specials[i]; bonus+=50; }
+      else if(sp==='rb'){ const g=board[i]; board.forEach((bg,bi)=>{ if(bg===g) extra.push(bi); }); delete specials[i]; bonus+=60; }
+      else if(sp==='mx'){ mult=2; delete specials[i]; bonus+=30; }
+      else if(bombs.includes(i)){ sfxBomb(); const r=Math.floor(i/COLS),c=i%COLS; for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){ const ni=(r+dr)*COLS+(c+dc); if(ni>=0&&ni<board.length) extra.push(ni); } bombs=bombs.filter(b=>b!==i); bonus+=40; }
+      board[i]=null; delete specials[i];
     });
-    score+=[...new Set(m)].length*10*(lvlIdx+1)+bonus;
-    render();await sleep(280);dropGems();render();await sleep(180);fillBoard();render();await sleep(180);
+    extra.forEach(i=>{ if(i>=0&&i<board.length){ board[i]=null; frozen=frozen.filter(f=>f!==i); bombs=bombs.filter(b=>b!==i); delete specials[i]; } });
+    score+=([...new Set([...mset,...extra])].length*10*(lvlIdx+1)+bonus)*mult;
+    render(); await sleep(260); dropGems(); render(); await sleep(160); fillBoard(); render(); await sleep(160);
     m=findMatches();
   }
   setMsg('');
 }
 
-function dropGems(){for(let c=0;c<COLS;c++){let col=[];for(let r=0;r<ROWS;r++)if(gemAt(r,c)!==null)col.push(gemAt(r,c));while(col.length<ROWS)col.unshift(null);for(let r=0;r<ROWS;r++)setGem(r,c,col[r]);}}
-function fillBoard(){for(let i=0;i<board.length;i++)if(board[i]===null)board[i]=GEMS[rand(GEMS.length)];}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-function setMsg(t){document.getElementById('msg').textContent=t;}
+function dropGems(){ for(let c=0;c<COLS;c++){ let col=[]; for(let r=0;r<ROWS;r++) if(gemAt(r,c)!==null) col.push(gemAt(r,c)); while(col.length<ROWS) col.unshift(null); for(let r=0;r<ROWS;r++) setGem(r,c,col[r]); } }
+function fillBoard(){ for(let i=0;i<board.length;i++) if(board[i]===null) board[i]=GEMS[rand(GEMS.length)]; }
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function setMsg(t){ document.getElementById('msg').textContent=t; }
 
 function showOverlay(win){
   const isLast=lvlIdx>=LEVELS.length-1;
+  if(win){ sfxWin(); addScore(score,lvlIdx+1); } else { sfxFail(); }
   document.getElementById('ov-title').textContent=win?(isLast?'🏆 All Levels!':'🎉 Level Complete!'):'😔 Game Over';
-  document.getElementById('ov-sub').textContent=`Score: ${score.toLocaleString()} / Target: ${TARGET.toLocaleString()}`;
+  document.getElementById('ov-sub').textContent=`Score: ${score.toLocaleString()} / Target: ${TGT.toLocaleString()}`;
   document.getElementById('overlay').querySelector('button').textContent=win?(isLast?'Play Again':'Next Level ▶'):'Try Again';
   document.getElementById('overlay').classList.add('show');
-
-  // ═══ SHOW INTERSTITIAL AD BETWEEN LEVELS ═══
-  // Uncomment and replace with your ad network's interstitial call:
+  // === INTERSTITIAL AD BETWEEN LEVELS ===
+  // Uncomment below and replace with your ad network's interstitial call:
   // if (win) { googletag.cmd.push(function() { interstitialSlot.display(); }); }
 }
 
 function overlayAction(){
   const win=document.getElementById('ov-title').textContent.includes('Complete')||document.getElementById('ov-title').textContent.includes('🏆');
   const isLast=lvlIdx>=LEVELS.length-1;
-  if(win&&!isLast){lvlIdx++;score=0;}
-  else{score=0;if(win)lvlIdx=0;}
+  if(win&&!isLast){ lvlIdx++; score=0; } else { score=0; if(win) lvlIdx=0; }
   loadLevel(lvlIdx);
 }
 
 function showRewardedAd(){
-  // ═══ REWARDED VIDEO AD ═══
-  // Replace this block with your rewarded video SDK call.
-  // Example with AdMob (via WebView):
-  //   rewardedAd.show(reward => { moves = Math.min(moves+5, MAX_MOVES); updateHUD(); });
-  // Example with IronSource:
-  //   IronSource.showRewardedVideo('placement', onReward);
-  //
-  // For now: simulates a 3-second "ad" then grants the reward.
-  const btn=document.querySelector('.rewarded-btn');
+  // === REWARDED VIDEO AD ===
+  // Replace this block with your rewarded video SDK:
+  // Example AdMob: rewardedAd.show(reward => grantReward());
+  // Example IronSource: IronSource.showRewardedVideo('placement', onReward);
+  const btn=document.getElementById('ad-btn');
   btn.disabled=true; btn.textContent='Watching…';
   setTimeout(()=>{
-    moves=Math.min(moves+5,MAX_MOVES);
+    moves=Math.min(moves+5,MAXM);
     btn.disabled=false; btn.textContent='Watch Ad → +5 moves';
     setMsg('+5 moves added! Keep going 🎉');
-    updateHUD();
-  },3000);
+    sfxReward(); updateHUD();
+  }, 3000);
 }
 
 loadLevel(0);
