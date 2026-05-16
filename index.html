@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gem Crush — Match 3 Puzzle Game</title>
+
+<!--
+  ============================================================
+  GOOGLE ADSENSE SETUP — 3 STEPS:
+
+  STEP 1: Replace "ca-pub-XXXXXXXXXXXXXXXXX" below with your
+          real AdSense Publisher ID from:
+          https://www.google.com/adsense → Account → Publisher ID
+
+  STEP 2: Replace each "XXXXXXXXXXXXXXXXXX" data-ad-slot with
+          the Ad Unit IDs you create in AdSense.
+          (AdSense → Ads → By ad unit → Create new ad unit)
+
+  STEP 3: Upload this file to your web server / GitHub Pages.
+          AdSense only shows real ads on live HTTPS domains.
+          On localhost you'll see placeholder boxes (that's normal).
+  ============================================================
+-->
+
+<!-- AdSense script — replace Publisher ID -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0c1a;
+    --surface: #1c1730;
+    --surface2: #251e3e;
+    --accent: #a78bfa;
+    --accent2: #f472b6;
+    --text: #f0eaff;
+    --muted: #8b7db5;
+    --radius: 12px;
+    --gem1: #ff6b6b; --gem2: #ffd93d; --gem3: #6bcb77; --gem4: #4d96ff; --gem5: #c77dff; --gem6: #ff9f43;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── TOP BANNER AD ── */
+  .ad-banner-top {
+    width: 100%;
+    max-width: 728px;
+    min-height: 90px;
+    background: var(--surface);
+    border-bottom: 1px solid rgba(167,139,250,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+  .ad-banner-top ins { display: block; width: 728px; height: 90px; }
+  /* Fallback label shown only when AdSense hasn't loaded yet */
+  .ad-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .page-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 16px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* ── LEFT SIDEBAR AD ── */
+  .ad-sidebar {
+    width: 160px;
+    min-height: 600px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    flex-shrink: 0;
+  }
+  .ad-sidebar ins { display: block; width: 160px; height: 600px; }
+
+  /* ── GAME AREA ── */
+  .game-area {
+    flex: 1;
+    max-width: 520px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .hud {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .hud-card {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .hud-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .hud-val { font-size: 20px; font-weight: 900; color: var(--text); }
+
+  .level-info {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .level-info strong { color: var(--accent); }
+
+  .progress-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
+  .progress-track { flex: 1; height: 7px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.4s ease; }
+
+  #board {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .gem {
+    aspect-ratio: 1;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.1s, box-shadow 0.15s;
+    user-select: none;
+    position: relative;
+  }
+  .gem:hover { transform: scale(1.1); }
+  .gem.selected { border-color: #fff; transform: scale(1.13); box-shadow: 0 0 12px rgba(255,255,255,0.4); }
+  .gem.frozen::after { content:'🧊'; position:absolute; font-size:9px; top:1px; right:1px; }
+  .gem.bomb-gem::after { content:'💣'; position:absolute; font-size:9px; top:1px; right:1px; }
+
+  #msg {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 18px;
+    margin-bottom: 8px;
+  }
+
+  /* ── REWARDED AD BUTTON ── */
+  .rewarded-ad-bar {
+    background: var(--surface);
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .rewarded-ad-bar span { font-size: 12px; color: var(--muted); }
+  .rewarded-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .rewarded-btn:hover { opacity: 0.85; }
+
+  /* ── BOTTOM RECTANGLE AD ── */
+  .ad-bottom {
+    background: var(--surface);
+    border-radius: var(--radius);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+  .ad-bottom ins { display: block; width: 320px; height: 100px; }
+
+  /* ── OVERLAY ── */
+  #overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(15,12,26,0.88);
+    border-radius: var(--radius);
+    z-index: 20;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  #overlay.show { display: flex; }
+  #overlay h2 { font-size: 26px; font-weight: 900; color: var(--text); }
+  #overlay p { font-size: 14px; color: var(--muted); }
+  #overlay button {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 28px;
+    font-size: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+
+  /* ── RIGHT SIDEBAR AD ── */
+  .ad-sidebar-right {
+    width: 160px;
+    min-height: 600px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    flex-shrink: 0;
+  }
+  .ad-sidebar-right ins { display: block; width: 160px; height: 600px; }
+
+  /* ── MOVES BAR ── */
+  .moves-bar { height: 4px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .moves-fill { height: 100%; background: #6bcb77; border-radius: 4px; transition: width 0.3s; }
+
+  @media (max-width: 900px) {
+    .ad-sidebar, .ad-sidebar-right { display: none; }
+  }
+  @media (max-width: 600px) {
+    .ad-banner-top ins { width: 320px; height: 50px; }
+    header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     AD UNIT 1: Leaderboard (728×90) — Top Banner
+     Replace data-ad-slot with your Ad Unit ID
+     ═══════════════════════════════════════════════ -->
+<div class="ad-banner-top">
+  <div>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <p class="ad-label">Advertisement</p>
+  </div>
+</div>
+
+<div class="page-layout">
+
+  <!-- ═══════════════════════════════════════════════
+       AD UNIT 2: Wide Skyscraper (160×600) — Left
+       Replace data-ad-slot with your Ad Unit ID
+       ═══════════════════════════════════════════════ -->
+  <div class="ad-sidebar">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXXXXXXXXXX"
+         data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <p class="ad-label">Ad</p>
+  </div>
+
+  <!-- ═══ GAME ═══ -->
+  <main class="game-area">
+    <header>
+      <h1>💎 Gem Crush</h1>
+      <p>Match gems • Earn points • Beat levels</p>
+    </header>
+
+    <div class="hud">
+      <div class="hud-card"><div class="hud-label">Score</div><div class="hud-val" id="score">0</div></div>
+      <div class="hud-card">
+        <div class="hud-label">Moves</div>
+        <div class="hud-val" id="moves">20</div>
+        <div class="moves-bar"><div class="moves-fill" id="moves-fill" style="width:100%"></div></div>
+      </div>
+      <div class="hud-card"><div class="hud-label">Level</div><div class="hud-val" id="level-num">1</div></div>
+      <div class="hud-card"><div class="hud-label">Best</div><div class="hud-val" id="best">0</div></div>
+    </div>
+
+    <div class="level-info">
+      <strong id="level-name">Level 1 — Warm-up</strong>
+      <span id="level-desc" style="color:var(--muted);font-size:12px">Match to reach the target!</span>
+    </div>
+
+    <div class="progress-wrap">
+      <span id="target-label" style="min-width:90px">0 / 300</span>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <span id="target-pct">0%</span>
+    </div>
+
+    <div style="position:relative">
+      <div id="board"></div>
+      <div id="overlay">
+        <h2 id="ov-title">Level Complete!</h2>
+        <p id="ov-sub">Score: 0</p>
+        <button onclick="overlayAction()">Next Level ▶</button>
+      </div>
+    </div>
+
+    <p id="msg">Swap adjacent gems to match 3 or more!</p>
+
+    <!-- ═══════════════════════════════════════════════
+         REWARDED ADS — best earner for casual games
+         Replace the fakeAd() call with your rewarded
+         video SDK (AdMob, IronSource, etc.)
+         ═══════════════════════════════════════════════ -->
+    <div class="rewarded-ad-bar">
+      <span>🎬 Watch a short video for bonus moves</span>
+      <button class="rewarded-btn" onclick="showRewardedAd()">Watch Ad → +5 moves</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         AD UNIT 3: Rectangle (320×100) — Below game
+         Replace data-ad-slot with your Ad Unit ID
+         ═══════════════════════════════════════════════ -->
+    <div class="ad-bottom">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <p class="ad-label">Advertisement</p>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════
+       AD UNIT 4: Wide Skyscraper (160×600) — Right
+       Replace data-ad-slot with your Ad Unit ID
+       ═══════════════════════════════════════════════ -->
+  <div class="ad-sidebar-right">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXXXXXXXXXX"
+         data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <p class="ad-label">Ad</p>
+  </div>
+
+</div>
+
+<script>
+const LEVELS = [
+  { name:'Level 1 — Warm-up',    desc:'Get started!',              target:300,  moves:20, cols:6, gemCount:4, frozen:0,  bombs:0 },
+  { name:'Level 2 — Heating up', desc:'More gems!',                target:600,  moves:22, cols:7, gemCount:5, frozen:0,  bombs:0 },
+  { name:'Level 3 — Icy gems',   desc:'Break the frozen gems!',    target:1000, moves:22, cols:7, gemCount:5, frozen:4,  bombs:0 },
+  { name:'Level 4 — Bomb squad', desc:'Use bombs wisely!',         target:1500, moves:20, cols:8, gemCount:5, frozen:3,  bombs:3 },
+  { name:'Level 5 — Chaos',      desc:'Limited moves!',            target:2200, moves:18, cols:8, gemCount:6, frozen:5,  bombs:3 },
+  { name:'Level 6 — Inferno',    desc:'No room for error!',        target:3000, moves:16, cols:8, gemCount:6, frozen:6,  bombs:4 },
+  { name:'Level 7 — Master',     desc:'Can you handle this?',      target:4000, moves:15, cols:8, gemCount:6, frozen:8,  bombs:5 },
+  { name:'Level 8 — Legend',     desc:'The ultimate challenge!',   target:6000, moves:14, cols:8, gemCount:6, frozen:10, bombs:6 },
+];
+const ALL_GEMS = ['🔴','🟡','🟢','🔵','🟣','🟠'];
+const GEM_BG = ['#3d1a1a','#3d3010','#1a3d20','#1a2a3d','#2d1a3d','#3d2510'];
+
+let lvlIdx=0, board=[], frozen=[], bombIdx=[], score=0, moves=0, selected=null, busy=false, best=0;
+let COLS=6, ROWS=8, GEMS=[], TARGET=300, MAX_MOVES=20;
+
+function loadLevel(idx) {
+  const l = LEVELS[Math.min(idx, LEVELS.length-1)];
+  COLS=l.cols; GEMS=ALL_GEMS.slice(0,l.gemCount);
+  TARGET=l.target; MAX_MOVES=l.moves; moves=l.moves;
+  frozen=[]; bombIdx=[];
+  board=Array.from({length:ROWS*COLS},()=>GEMS[rand(GEMS.length)]);
+  while(findMatches().length) board=Array.from({length:ROWS*COLS},()=>GEMS[rand(GEMS.length)]);
+  const cells=shuffled([...Array(ROWS*COLS).keys()]);
+  cells.slice(0,l.frozen).forEach(i=>frozen.push(i));
+  cells.slice(l.frozen,l.frozen+l.bombs).forEach(i=>bombIdx.push(i));
+  document.getElementById('level-name').textContent=l.name;
+  document.getElementById('level-desc').textContent=l.desc;
+  document.getElementById('level-num').textContent=idx+1;
+  document.getElementById('overlay').classList.remove('show');
+  updateHUD(); render();
+}
+
+function rand(n){return Math.floor(Math.random()*n);}
+function shuffled(a){for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function gemAt(r,c){return board[r*COLS+c];}
+function setGem(r,c,v){board[r*COLS+c]=v;}
+
+function findMatches(){
+  let m=new Set();
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-2;c++){let g=gemAt(r,c);if(g&&g===gemAt(r,c+1)&&g===gemAt(r,c+2))[0,1,2].forEach(i=>m.add(r*COLS+c+i));}
+  for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-2;r++){let g=gemAt(r,c);if(g&&g===gemAt(r+1,c)&&g===gemAt(r+2,c))[0,1,2].forEach(i=>m.add((r+i)*COLS+c));}
+  return[...m];
+}
+
+function render(){
+  const bd=document.getElementById('board');
+  bd.style.gridTemplateColumns=`repeat(${COLS},1fr)`;
+  bd.innerHTML='';
+  board.forEach((g,i)=>{
+    const el=document.createElement('div');
+    el.className='gem'; el.textContent=g;
+    el.style.background=GEM_BG[ALL_GEMS.indexOf(g)]||'#1c1730';
+    if(frozen.includes(i))el.classList.add('frozen');
+    if(bombIdx.includes(i))el.classList.add('bomb-gem');
+    if(selected===i)el.classList.add('selected');
+    el.onclick=()=>onTap(i);
+    bd.appendChild(el);
+  });
+  updateHUD();
+}
+
+function updateHUD(){
+  document.getElementById('score').textContent=score.toLocaleString();
+  document.getElementById('moves').textContent=moves;
+  document.getElementById('moves-fill').style.width=Math.round((moves/MAX_MOVES)*100)+'%';
+  const pct=Math.min(100,Math.round((score/TARGET)*100));
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('target-label').textContent=`${score.toLocaleString()} / ${TARGET.toLocaleString()}`;
+  document.getElementById('target-pct').textContent=pct+'%';
+  if(score>best){best=score;document.getElementById('best').textContent=best.toLocaleString();}
+}
+
+function onTap(i){
+  if(busy)return;
+  if(selected===null){selected=i;render();return;}
+  if(selected===i){selected=null;render();return;}
+  const r1=Math.floor(selected/COLS),c1=selected%COLS,r2=Math.floor(i/COLS),c2=i%COLS;
+  if((Math.abs(r1-r2)+Math.abs(c1-c2))!==1){selected=i;render();return;}
+  doSwap(selected,i);
+}
+
+async function doSwap(a,b){
+  busy=true;selected=null;
+  if(frozen.includes(a)||frozen.includes(b)){setMsg('That gem is frozen! Match it to break it.');busy=false;render();return;}
+  [board[a],board[b]]=[board[b],board[a]];
+  if(!findMatches().length){[board[a],board[b]]=[board[b],board[a]];busy=false;setMsg('No match — try again!');render();return;}
+  moves--;
+  await resolveMatches();
+  if(score>=TARGET)showOverlay(true);
+  else if(moves<=0)showOverlay(false);
+  busy=false;render();
+}
+
+async function resolveMatches(){
+  let m=findMatches();
+  while(m.length){
+    let bonus=0;
+    m.forEach(i=>{
+      frozen=frozen.filter(f=>f!==i);
+      if(bombIdx.includes(i)){
+        const r=Math.floor(i/COLS),c=i%COLS;
+        for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const ni=(r+dr)*COLS+(c+dc);if(ni>=0&&ni<board.length){m.push(ni);bonus+=20;}}
+        bombIdx=bombIdx.filter(b=>b!==i);
+      }
+      board[i]=null;
+    });
+    score+=[...new Set(m)].length*10*(lvlIdx+1)+bonus;
+    render();await sleep(280);dropGems();render();await sleep(180);fillBoard();render();await sleep(180);
+    m=findMatches();
+  }
+  setMsg('');
+}
+
+function dropGems(){for(let c=0;c<COLS;c++){let col=[];for(let r=0;r<ROWS;r++)if(gemAt(r,c)!==null)col.push(gemAt(r,c));while(col.length<ROWS)col.unshift(null);for(let r=0;r<ROWS;r++)setGem(r,c,col[r]);}}
+function fillBoard(){for(let i=0;i<board.length;i++)if(board[i]===null)board[i]=GEMS[rand(GEMS.length)];}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function setMsg(t){document.getElementById('msg').textContent=t;}
+
+function showOverlay(win){
+  const isLast=lvlIdx>=LEVELS.length-1;
+  document.getElementById('ov-title').textContent=win?(isLast?'🏆 All Levels!':'🎉 Level Complete!'):'😔 Game Over';
+  document.getElementById('ov-sub').textContent=`Score: ${score.toLocaleString()} / Target: ${TARGET.toLocaleString()}`;
+  document.getElementById('overlay').querySelector('button').textContent=win?(isLast?'Play Again':'Next Level ▶'):'Try Again';
+  document.getElementById('overlay').classList.add('show');
+
+  // ═══ SHOW INTERSTITIAL AD BETWEEN LEVELS ═══
+  // Uncomment and replace with your ad network's interstitial call:
+  // if (win) { googletag.cmd.push(function() { interstitialSlot.display(); }); }
+}
+
+function overlayAction(){
+  const win=document.getElementById('ov-title').textContent.includes('Complete')||document.getElementById('ov-title').textContent.includes('🏆');
+  const isLast=lvlIdx>=LEVELS.length-1;
+  if(win&&!isLast){lvlIdx++;score=0;}
+  else{score=0;if(win)lvlIdx=0;}
+  loadLevel(lvlIdx);
+}
+
+function showRewardedAd(){
+  // ═══ REWARDED VIDEO AD ═══
+  // Replace this block with your rewarded video SDK call.
+  // Example with AdMob (via WebView):
+  //   rewardedAd.show(reward => { moves = Math.min(moves+5, MAX_MOVES); updateHUD(); });
+  // Example with IronSource:
+  //   IronSource.showRewardedVideo('placement', onReward);
+  //
+  // For now: simulates a 3-second "ad" then grants the reward.
+  const btn=document.querySelector('.rewarded-btn');
+  btn.disabled=true; btn.textContent='Watching…';
+  setTimeout(()=>{
+    moves=Math.min(moves+5,MAX_MOVES);
+    btn.disabled=false; btn.textContent='Watch Ad → +5 moves';
+    setMsg('+5 moves added! Keep going 🎉');
+    updateHUD();
+  },3000);
+}
+
+loadLevel(0);
+</script>
+</body>
+</html>
